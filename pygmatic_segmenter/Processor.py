@@ -36,7 +36,8 @@ class Processor:
         return list(map(lambda seg: seg.apply(self.language.SubSingleQuoteRule), segments))
 
     def post_process_segments(self, txt):
-        if len(txt) < 2 and re.match(r"[a-zA-Z]*", txt):
+        # HACK: replaced \A and \Z with ^*, shouldn't affect anything
+        if len(txt) < 2 and re.match(r"^[a-zA-Z]*$", txt):
             return txt
         if len(txt) < 2 or self.check_consecutive_underscore(txt):
             return

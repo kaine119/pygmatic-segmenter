@@ -10,6 +10,7 @@ class EllipsisRules:
     # Rubular: http://rubular.com/r/YBG1dIHTRu
     ThreeSpaceRule = Rule(r"(\s\.){3}\s", '♟')
 
+    # HACK: this works even with \Z?
     # Rubular: http://rubular.com/r/2VvZ8wRbd8
     FourSpaceRule = Rule(r"(?<=[a-z])(\.\s){3}\.(\z|$|\n)", '♝')
 

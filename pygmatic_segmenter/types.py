@@ -25,11 +25,10 @@ class Text(str):
         This can be stacked, i.e. Text('abc').apply(...).apply(...)"""
         processed_string = self
         for rule in flatten(rules, Rule):
-            print("Applying", rule)
             processed_string = re.sub(rule.pattern, rule.replacement, self)
         return Text(processed_string)
 
-# TODO: finish this class up
+# HACK: Some of the regexes don't have the \A cases; need to test if this affects anything
 class List:
     """This class searches for a list within a string and adds 
     newlines before each list item."""
@@ -37,11 +36,13 @@ class List:
     LATIN_NUMERALS = list(ascii_lowercase)
 
     # Rubular: http://rubular.com/r/XcpaJKH0sz
-    ALPHABETICAL_LIST_WITH_PERIODS = r"(?<=^)[a-z](?=\.)|(?<=\A)[a-z](?=\.)|(?<=\s)[a-z](?=\.)"
+    # HACK: missing \A
+    ALPHABETICAL_LIST_WITH_PERIODS = r"(?<=^)[a-z](?=\.)|(?<=\s)[a-z](?=\.)"
 
     # Rubular: http://rubular.com/r/Gu5rQapywf
     # the (?i) at the end represents the case-insensitive flag (i.e. /pattern/i)
-    ALPHABETICAL_LIST_WITH_PARENS = r"(?<=\()[a-z]+(?=\))|(?<=^)[a-z]+(?=\))|(?<=\A)[a-z]+(?=\))|(?<=\s)[a-z]+(?=\))(?i)"
+    # HACK: missing \A
+    ALPHABETICAL_LIST_WITH_PARENS = r"(?<=\()[a-z]+(?=\))|(?<=^)[a-z]+(?=\))|(?<=\s)[a-z]+(?=\))(?i)"
 
     SubstituteListPeriodRule = Rule(r"♨", '∯')
     ListMarkerRule = Rule(r"☝", '')
