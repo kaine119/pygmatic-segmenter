@@ -1,5 +1,5 @@
-import pygmatic_segmenter.languages.English
-import pygmatic_segmenter.languages.Common
+from pygmatic_segmenter.languages import English
+from pygmatic_segmenter.languages import Common
 
 LANGUAGE_CODES = {
 	"en": English

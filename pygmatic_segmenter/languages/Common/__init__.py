@@ -45,7 +45,7 @@ class ExclamationPointRules:
     All = [ InQuotationRule, BeforeCommaMidSentenceRule, MidSentenceRule ]
 
 class SubSymbolsRules:
-    Period = Rule(r"/", r'.')
+    Period = Rule(r'∯', '.')
     ArabicComma = Rule(r"♬", r'،')
     SemiColon = Rule(r"♭", r':')
     FullWidthPeriod = Rule(r"&ᓰ&", r'。')
@@ -80,9 +80,7 @@ class ReinsertEllipsisRules:
     SubTwoConsecutivePeriod = Rule(r"☏", r'..')
     SubOnePeriod = Rule(r"∮", r'.')
 
-    All = [ SubThreeConsecutivePeriod, SubThreeSpacePeriod,
-            SubFourSpacePeriod, SubTwoConsecutivePeriod,
-            SubOnePeriod ]
+    All = [ SubThreeConsecutivePeriod, SubThreeSpacePeriod, SubFourSpacePeriod, SubTwoConsecutivePeriod, SubOnePeriod ]
 
 ExtraWhiteSpaceRule = Rule(r"\s{3,}", ' ')
 
@@ -108,12 +106,12 @@ BETWEEN_DOUBLE_QUOTES_REGEX = r'"(?:[^"])*[^,]"|“(?:[^”])*[^,]”'
 SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX = r'(?<=[!?\.-][\"\'”“])\s{1}(?=[A-Z])'
 
 # Rubular: http://rubular.com/r/mQ8Es9bxtk
-CONTINUOUS_PUNCTUATION_REGEX = r'(?<=\S)(!|\?){3,}(?=(\s|\z|$))'
+CONTINUOUS_PUNCTUATION_REGEX = r'(?<=\S)(!|\?){3,}(?=(\s|$))'
 
 NUMBERED_REFERENCE_REGEX = r'(?<=[^\d\s])(\.|∯)((\[(\d{1,3},?\s?-?\s?)*\b\d{1,3}\])+|((\d{1,3}\s?)*\d{1,3}))(\s)(?=[A-Z])'
 
 # Rubular: http://rubular.com/r/yqa4Rit8EY
-PossessiveAbbreviationRule = Rule(r"\.(?='s\s)|\.(?='s$)|\.(?='s\z)", '∯')
+PossessiveAbbreviationRule = Rule(r"\.(?='s\s)|\.(?='s$)|\.(?='s$)", '∯')
 
 # Rubular: http://rubular.com/r/NEv265G2X2
 KommanditgesellschaftRule = Rule(r"(?<=Co)\.(?=\sKG)", '∯')
@@ -162,7 +160,7 @@ class EllipsisRules:
     ThreeSpaceRule = Rule(r"(\s\.){3}\s", '♟')
 
     # Rubular: http://rubular.com/r/2VvZ8wRbd8
-    FourSpaceRule = Rule(r"(?<=[a-z])(\.\s){3}\.(\z|$|\n)", '♝')
+    FourSpaceRule = Rule(r"(?<=[a-z])(\.\s){3}\.(|$|\n)", '♝')
 
     OtherThreePeriodRule = Rule(r"\.\.\.", 'ƪ')
 

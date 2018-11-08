@@ -1,7 +1,8 @@
 from pygmatic_segmenter.languages import Common
-from pygmatic_segmenter.types import Text, flatten
+from pygmatic_segmenter.types import Text, List, flatten
 from pygmatic_segmenter import ExclamationWords
 from pygmatic_segmenter import BetweenPunctuation
+from pygmatic_segmenter import AbbreviationReplacer
 import itertools # for map()
 import re
 
@@ -10,12 +11,11 @@ class Processor:
         self.language = language
         
     def process(self, text):
-        # TODO: pass text through the List class first
-        self.text = Text(text)
-        # self.replace_abbreviations()
-        # self.replace_numbers()
-        # self.replace_continuous_punctuation()
-        # self.replace_periods_before_numeric_references()
+        self.text = List(text = text).add_line_break()
+        self.replace_abbreviations()
+        self.replace_numbers()
+        self.replace_continuous_punctuation()
+        self.replace_periods_before_numeric_references()
         self.text = self.text.apply(self.language.Abbreviations.WithMultiplePeriodsAndEmailRule)\
                              .apply(self.language.GeoLocationRule)\
                              .apply(self.language.FileFormatRule)
@@ -30,6 +30,7 @@ class Processor:
                        segments)
         segments = flatten(map(self.check_for_punctuation, segments), str)
         segments = map(lambda seg: seg.apply(self.language.SubSymbolsRules.All), segments)
+        segments = map(lambda seg: seg.apply(self.language.SubSymbolsRules.Period), segments)
         segments = flatten(map(lambda seg: self.post_process_segments(seg), segments), str)
         segments = [seg for seg in segments if seg is not None]
         return list(map(lambda seg: seg.apply(self.language.SubSingleQuoteRule), segments))
@@ -39,11 +40,11 @@ class Processor:
             return txt
         if len(txt) < 2 or self.check_consecutive_underscore(txt):
             return
-        txt = txt.apply(
-            self.language.ReinsertEllipsisRules.All,
-            self.language.ExtraWhiteSpaceRule
-        )
 
+        txt = txt.apply(
+            self.language.ExtraWhiteSpaceRule,
+            self.language.ReinsertEllipsisRules.All
+        )
 
         if re.match(self.language.QUOTATION_AT_END_OF_SENTENCE_REGEX, txt):
             return [Text(n) for n in re.split(self.language.SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX, txt)]
@@ -69,6 +70,7 @@ class Processor:
 
     def replace_periods_before_numeric_references(self):
         self.text = re.sub(self.language.NUMBERED_REFERENCE_REGEX, "∯\\2\r\\7", self.text)
+        self.text = Text(self.text)
 
     def check_consecutive_underscore(self, txt):
         # Rubular: http://rubular.com/r/fTF2Ff3WBL
@@ -81,7 +83,7 @@ class Processor:
             return txt
 
     def process_text(self, txt):
-        if not txt[-1] in self.language.PUNCTUATIONS:
+        if txt[-1] not in self.language.PUNCTUATIONS:
             txt += "ȸ"
         ExclamationWords.apply_rules(txt)
         self.between_punctuation(txt)
@@ -99,13 +101,12 @@ class Processor:
         return self.text
 
 
-    # TODO: implement this
-    # def replace_abbreviations(self):
-    #     try:
-    #         abbreviations_replacer = self.language.AbbreviationReplacer
-    #     except AttributeError:
-    #         abbreviations_replacer = AbbreviationReplacer
-    #     self.text = abbreviations_replacer(text, language).replace()
+    def replace_abbreviations(self):
+        try:
+            abbreviations_replacer = self.language.AbbreviationReplacer.AbbreviationReplacer
+        except AttributeError:
+            abbreviations_replacer = AbbreviationReplacer.AbbreviationReplacer
+        self.text = abbreviations_replacer(self.text, self.language).replace()
 
     def between_punctuation(self, txt):
         try:

@@ -3,7 +3,7 @@ from pygmatic_segmenter.languages import get_language_by_code
 from pygmatic_segmenter.Processor import Processor
 
 class Segmenter:
-    def __init__(self, text, language, doc_type):
+    def __init__(self, text, language = None, doc_type = None):
         if not text:
             raise ValueError("Text must not be empty")
         
