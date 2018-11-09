@@ -93,8 +93,7 @@ class Processor:
             self.language.QuestionMarkInQuotationRule,
             self.language.ExclamationPointRules.All
             )
-        # TODO: enable next line after List class is done
-        # txt = List(text = txt).replace_parens
+        txt = List(text = txt).replace_parens()
         return self.sentence_boundary_punctuation(txt)
 
     def replace_numbers(self):

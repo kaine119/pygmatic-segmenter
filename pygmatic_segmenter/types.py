@@ -81,7 +81,7 @@ class List:
         return self.format_numbered_list_with_parens()
 
     def replace_parens(self):
-        re.sub(ROMAN_NUMERALS_IN_PARENTHESES, r"&✂&\1&⌬&", self.text)
+        re.sub(self.ROMAN_NUMERALS_IN_PARENTHESES, r"&✂&\1&⌬&", self.text)
         return self.text
 
     def format_numbered_list_with_parens(self):
