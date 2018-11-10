@@ -28,7 +28,7 @@ class AbbreviationReplacer:
             abbrev_match = re.findall(r"(?:^|\s|\r|\n){}(?i)".format(re.escape(stripped)), original)
             if len(abbrev_match) == 0:
                 continue
-            next_word_start = r"(<={} ).{1}".format(re.escape(stripped))
+            next_word_start = r"(?<={} ).{1}".format(re.escape(stripped))
             character_array = re.findall(next_word_start, self.text)
             for i, am in enumerate(abbrev_match):
                 txt = scan_for_replacements(txt, am, i, character_array)

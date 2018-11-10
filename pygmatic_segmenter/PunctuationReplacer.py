@@ -1,4 +1,4 @@
-from pygmatic_segmenter.types import Rule
+from pygmatic_segmenter.types import Rule, Text
 
 class PunctuationReplacer():
     class Rules:
@@ -27,6 +27,7 @@ class PunctuationReplacer():
 
     def replace(self):
         self.replace_punctuation(self.matches_array)
+        return Text(self.text)
 
     def replace_punctuation(self, array):
         if not array or len(array) == 0:

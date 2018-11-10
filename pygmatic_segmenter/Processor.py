@@ -86,8 +86,8 @@ class Processor:
     def process_text(self, txt):
         if txt[-1] not in self.language.PUNCTUATIONS:
             txt += "ȸ"
-        ExclamationWords.apply_rules(txt)
-        self.between_punctuation(txt)
+        txt = ExclamationWords.apply_rules(txt)
+        txt = self.between_punctuation(txt)
         txt = txt.apply(
             self.language.DoublePunctuationRules.All,
             self.language.QuestionMarkInQuotationRule,
@@ -113,7 +113,8 @@ class Processor:
             between_punctuation_processor = self.language.BetweenPunctuation
         except AttributeError:
             between_punctuation_processor = BetweenPunctuation
-        self.text = between_punctuation_processor.BetweenPunctuation(txt).replace()
+        return between_punctuation_processor.BetweenPunctuation(txt).replace()
+
 
 
     def sentence_boundary_punctuation(self, txt):
