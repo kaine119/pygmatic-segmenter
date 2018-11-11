@@ -23,24 +23,24 @@ class AbbreviationReplacer:
         downcased = original.lower()
         for abbreiv in self.language.Abbreviation.ABBREVIATIONS:
             stripped = abbreiv.strip()
-            if stripped in downcased:
+            if stripped not in downcased:
                 continue
             abbrev_match = re.findall(r"(?:^|\s|\r|\n){}(?i)".format(re.escape(stripped)), original)
             if len(abbrev_match) == 0:
                 continue
-            next_word_start = r"(?<={} ).{1}".format(re.escape(stripped))
+            next_word_start = r"(?<=" + re.escape(stripped) + " ).{1}"
             character_array = re.findall(next_word_start, self.text)
             for i, am in enumerate(abbrev_match):
-                txt = scan_for_replacements(txt, am, i, character_array)
+                txt = self.scan_for_replacements(txt, am, i, character_array)
 
         return txt
 
     def scan_for_replacements(self, txt, am, index, character_array):
-        character = character_array[index]
+        character = character_array[index] if len(character_array) > index else None
         prepositive = self.language.Abbreviation.PREPOSITIVE_ABBREVIATIONS
         number_abbr = self.language.Abbreviation.NUMBER_ABBREVIATIONS
         upper = re.search(r"[[:upper]]", str(character))
-        if not upper and am.strip().lower() in prepositive:
+        if (not upper) or am.strip().lower() in prepositive:
             if am.strip().lower() in prepositive:
                 txt = self.replace_prepositive_abbr(txt, am)
             elif am.strip().lower() in number_abbr:
@@ -75,24 +75,24 @@ class AbbreviationReplacer:
 
     def replace_multi_period_abbreviations(self, txt):
         mpa = re.findall(self.language.MULTI_PERIOD_ABBREVIATION_REGEX, txt)
-        if len(mpa) == 0: return txt
+        if len(mpa) == 0: return Text(txt)
         for match in mpa:
             txt = re.sub(re.escape(match), match.replace('.', '∯'), txt)
         return Text(txt)
 
     def replace_pre_number_abbr(self, txt, abbr):
-        txt = re.sub(r"(?<=\s{ab})\.(?=\s\d)|(?<=^{ab})\.(?=\s\d)".format(ab = abbr.strip), '∯', txt)
-        txt = re.sub(r"(?<=\s{ab})\.(?=\s+\()|(?<=^{ab})\.(?=\s+\()".format(ab = abbr.strip), '∯', txt)
+        txt = re.sub(r"(?<=\s{ab})\.(?=\s\d)|(?<=^{ab})\.(?=\s\d)".format(ab = abbr.strip()), '∯', txt)
+        txt = re.sub(r"(?<=\s{ab})\.(?=\s+\()|(?<=^{ab})\.(?=\s+\()".format(ab = abbr.strip()), '∯', txt)
         return txt
 
     def replace_prepositive_abbr(self, txt, abbr):
-        txt = re.sub(r"(?<=\s{ab})\.(?=\s)|(?<=^{ab})\.(?=\s)".format(ab = abbr.strip), '∯', txt)
-        txt = re.sub(r"(?<=\s{ab})\.(?=:\d+)|(?<=^{ab})\.(?=:\d+)".format(ab = abbr.strip), '∯', txt)
+        txt = re.sub(r"(?<=\s{ab})\.(?=\s)|(?<=^{ab})\.(?=\s)".format(ab = abbr.strip()), '∯', txt)
+        txt = re.sub(r"(?<=\s{ab})\.(?=:\d+)|(?<=^{ab})\.(?=:\d+)".format(ab = abbr.strip()), '∯', txt)
         return txt
 
     def replace_period_of_abbr(self, txt, abbr):
-        txt = re.sub(r"(?<=\s{ab})\.(?=((\.|\:|-|\?)|(\s([a-z]|I\s|I'm|I'll|\d|\())))|(?<=^{ab})\.(?=((\.|\:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))".format(ab = abbr.strip), '∯', txt)
-        txt = re.sub(r"(?<=\s{ab})\.(?=,)|(?<=^{ab})\.(?=,)".format(ab = abbr.strip), '∯', txt)
+        txt = re.sub(r"(?<=\s{ab})\.(?=((\.|\:|-|\?)|(\s([a-z]|I\s|I'm|I'll|\d|\())))|(?<=^{ab})\.(?=((\.|\:|\?)|(\s([a-z]|I\s|I'm|I'll|\d))))".format(ab = abbr.strip()), '∯', txt)
+        txt = re.sub(r"(?<=\s{ab})\.(?=,)|(?<=^{ab})\.(?=,)".format(ab = abbr.strip()), '∯', txt)
         return txt
 
     def replace_possessive_abbreviations(self, txt):

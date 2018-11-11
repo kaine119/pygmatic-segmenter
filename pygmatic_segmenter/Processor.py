@@ -37,7 +37,7 @@ class Processor:
 
     def post_process_segments(self, txt):
         # HACK: replaced \A and \Z with ^*, shouldn't affect anything
-        if len(txt) < 2 and re.match(r"^[a-zA-Z]*$", txt):
+        if len(txt) < 2 and re.search(r"^[a-zA-Z]*$", txt):
             return txt
         if len(txt) < 2 or self.check_consecutive_underscore(txt):
             return
