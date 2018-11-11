@@ -66,7 +66,7 @@ class BetweenPunctuation:
         self.text = PunctuationReplacer(matches_array = re.findall(self.BETWEEN_SQUARE_BRACKETS_REGEX, self.text), text = self.text).replace()
 
     def sub_punctuation_between_single_quotes(self):
-        if not (re.match(self.WORD_WITH_LEADING_APOSTROPHE, self.text) and not re.match(r"/'\s", self.text)):
+        if not (re.search(self.WORD_WITH_LEADING_APOSTROPHE, self.text) and not re.search(r"/'\s", self.text)):
             self.text = PunctuationReplacer(matches_array = re.findall(self.BETWEEN_SINGLE_QUOTES_REGEX, self.text), text = self.text).replace()
 
     def sub_punctuation_between_single_quote_slanted(self):

@@ -47,13 +47,13 @@ class Processor:
             self.language.ReinsertEllipsisRules.All
         )
 
-        if re.match(self.language.QUOTATION_AT_END_OF_SENTENCE_REGEX, txt):
+        if re.search(self.language.QUOTATION_AT_END_OF_SENTENCE_REGEX, txt):
             return [Text(n) for n in re.split(self.language.SPLIT_SPACE_QUOTATION_AT_END_OF_SENTENCE_REGEX, txt)]
         else:
             return Text(txt.replace("\n", "").strip())
 
     def check_for_parens_between_quotes(self, txt):
-        if not re.match(self.language.PARENS_BETWEEN_DOUBLE_QUOTES_REGEX, txt):
+        if not re.search(self.language.PARENS_BETWEEN_DOUBLE_QUOTES_REGEX, txt):
             return txt
 
         def handle_matches(match):

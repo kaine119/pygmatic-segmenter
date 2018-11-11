@@ -39,14 +39,14 @@ class AbbreviationReplacer:
         character = character_array[index]
         prepositive = self.language.Abbreviation.PREPOSITIVE_ABBREVIATIONS
         number_abbr = self.language.Abbreviation.NUMBER_ABBREVIATIONS
-        upper = re.match(r"[[:upper]]", str(character))
+        upper = re.search(r"[[:upper]]", str(character))
         if not upper and am.strip().lower() in prepositive:
             if am.strip().lower() in prepositive:
-                txt = replace_prepositive_abbr(txt, am)
+                txt = self.replace_prepositive_abbr(txt, am)
             elif am.strip().lower() in number_abbr:
-                txt = replace_pre_number_abbr(txt, am)
+                txt = self.replace_pre_number_abbr(txt, am)
             else:
-                txt = replace_period_of_abbr(txt, am)
+                txt = self.replace_period_of_abbr(txt, am)
 
         return txt
 

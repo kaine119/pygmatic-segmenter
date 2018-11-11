@@ -106,7 +106,7 @@ class List:
         self.scan_lists(self.NUMBERED_LIST_REGEX_1, self.NUMBERED_LIST_REGEX_2, '♨', strip = True)
 
     def add_line_breaks_for_numbered_list_with_periods(self):
-        if '♨' in self.text and (not re.match(r"♨.+\n.+♨|♨.+\r.+♨/ && @text !~ /for\s\d{1,2}♨\s[a-z]", self.text)):
+        if '♨' in self.text and (not re.search(r"♨.+\n.+♨|♨.+\r.+♨/ && @text !~ /for\s\d{1,2}♨\s[a-z]", self.text)):
             self.text.apply(SpaceBetweenListItemsFirstRule, SpaceBetweenListItemsSecondRule)
 
     def replace_parens_in_numbered_list(self):
@@ -114,7 +114,7 @@ class List:
         self.scan_lists(self.NUMBERED_LIST_PARENS_REGEX, self.NUMBERED_LIST_PARENS_REGEX, '☝')
 
     def add_line_breaks_for_numbered_list_with_parens(self):
-        if '☝' in self.text and (not re.match(r"☝.+\n.+☝|☝.+\r.+☝", self.text)):
+        if '☝' in self.text and (not re.search(r"☝.+\n.+☝|☝.+\r.+☝", self.text)):
             self.text.apply(SpaceBetweenListItemsThirdRule)
 
     def scan_lists(self, regex1, regex2, replacement, strip = False):
