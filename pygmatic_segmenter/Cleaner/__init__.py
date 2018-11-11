@@ -58,11 +58,10 @@ class Cleaner():
 
     def search_for_connected_sentences(self, word, regex, rule):
         word = Text(word)
-        if re.match(regex, word):
-            if not [web for web in Rules.URL_EMAIL_KEYWORDS if re.match(web, word)]:
-                if not [abbr for abbr in Rules.URL_EMAIL_KEYWORDS if re.match(abbr, word)]:
-                    new_word = word.apply(rule)
-                    self.text = Text(self.text.replace(word, new_word))
+        if re.search(regex, word):
+            if not any(web for web in Rules.URL_EMAIL_KEYWORDS if re.search(web, word)):
+                new_word = word.apply(rule)
+                self.text = Text(self.text.replace(word, new_word))
 
     def remove_all_newlines(self):
         self.remove_newline_in_middle_of_sentence()
