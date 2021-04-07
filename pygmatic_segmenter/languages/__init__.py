@@ -1,8 +1,10 @@
 from pygmatic_segmenter.languages import English
 from pygmatic_segmenter.languages import Common
+from pygmatic_segmenter.languages import Armenian
 
 LANGUAGE_CODES = {
-	"en": English
+	"en": English,
+    "hy": Armenian
 }
 
 def get_language_by_code(code):
