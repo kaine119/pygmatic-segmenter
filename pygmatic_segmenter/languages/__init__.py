@@ -3,7 +3,7 @@ from pygmatic_segmenter.languages import Common
 from pygmatic_segmenter.languages import Armenian
 
 LANGUAGE_CODES = {
-	"en": English,
+    "en": English,
     "hy": Armenian
 }
 
